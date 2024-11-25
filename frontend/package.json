@@ -4,14 +4,21 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "start": "electron .",
+    "build": "electron-builder"
   },
   "keywords": [],
   "author": "beisenmiyi",
   "license": "ISC",
   "description": "an chat app for windows",
+  "build": {
+    "appId": "com.beisenmiyi.BsmyChat"
+  },
   "devDependencies": {
     "electron": "file:electron-v32.2.5-win32-x64",
     "electron-builder": "^25.1.8"
+  },
+  "dependencies": {
+    "electron-updater": "^6.3.9"
   }
 }
