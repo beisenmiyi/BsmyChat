@@ -11,6 +11,7 @@
   "license": "ISC",
   "description": "an chat app for windows",
   "devDependencies": {
-    "electron": "file:electron-v32.2.5-win32-x64"
+    "electron": "file:electron-v32.2.5-win32-x64",
+    "electron-builder": "^25.1.8"
   }
 }
