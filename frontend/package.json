@@ -12,7 +12,16 @@
   "license": "ISC",
   "description": "an chat app for windows",
   "build": {
-    "appId": "com.beisenmiyi.BsmyChat"
+    "appId": "com.beisenmiyi.BsmyChat",
+    "productName": "BsmyChat",
+    "publish": [
+      {
+        "provider": "github",
+        "repo": "BsmyChat",
+        "owner": "beisenmiyi",
+        "releaseType": "release"
+      }
+    ]
   },
   "devDependencies": {
     "electron": "file:electron-v32.2.5-win32-x64",
