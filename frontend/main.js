@@ -47,7 +47,7 @@ function checkForUpdates() {
 
 //创建系统托盘图标函数
 function createTray() {
-    const icon = nativeImage.createFromPath(path.join(__dirname, "images", ""));//创建托盘图标的图片对象
+    const icon = nativeImage.createFromPath(path.join(__dirname, "images", "BSMY.png"));//创建托盘图标的图片对象
     tray = new Tray(icon);//创建托盘图标
     tray.setToolTip("BsmyChat");//设置托盘图标的提示信息
     //托盘图标的点击事件
