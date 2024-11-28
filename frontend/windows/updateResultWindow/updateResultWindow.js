@@ -1,5 +1,5 @@
-const updateResultWindow = document.getElementById("updateResultWindow");
-const immediatelyUpdateBtn = document.getElementById("immediatelyUpdateBtn");
+const updateResultWindow = document.getElementById("updateResultWindow");//内容显示区
+const downloadOrInstallBtn = document.getElementById("downloadOrInstallBtn");//下载或安装更新按钮
 
 //监听更新信息
 window.myAPI.onUpdateAvailable((event, info) => {
@@ -19,16 +19,16 @@ window.myAPI.onDownloadProgress((event, progressObj) => {
 //监听下载完成信息
 window.myAPI.onUpdateDownloaded((event) => {
     updateResultWindow.textContent = "下载完成"
-    immediatelyUpdateBtn.textContent = "立即安装";
+    downloadOrInstallBtn.textContent = "立即安装";
 });
 
 //监听“立即更新”按钮点击事件
-immediatelyUpdateBtn.addEventListener("click", () => {
-    if (immediatelyUpdateBtn.textContent === "下载更新") {
-        immediatelyUpdateBtn.textContent = "下载中";
+downloadOrInstallBtn.addEventListener("click", () => {
+    if (downloadOrInstallBtn.textContent === "下载更新") {
+        downloadOrInstallBtn.textContent = "下载中";
         window.myAPI.sendDownloadUpdate();//发送下载更新请求
     }
-    if (immediatelyUpdateBtn.textContent === "立即安装") {
+    if (downloadOrInstallBtn.textContent === "立即安装") {
         window.myAPI.sendQuitAndInstall();//发送安装更新请求
     }
 });

@@ -1,9 +1,10 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, Tray, Menu, nativeImage } = require("electron");
 const { autoUpdater } = require("electron-updater");
 const path = require("node:path");
 
 let mainWindow = null;//主窗口变量
 let updateResultWindow = null;//更新窗口变量
+let tray = null;//托盘图标变量
 
 //检查更新函数
 function checkForUpdates() {
@@ -44,6 +45,27 @@ function checkForUpdates() {
     autoUpdater.checkForUpdates();//检查更新
 };
 
+//创建系统托盘图标函数
+function createTray() {
+    const icon = nativeImage.createFromPath(path.join(__dirname, "images", ""));//创建托盘图标的图片对象
+    tray = new Tray(icon);//创建托盘图标
+    tray.setToolTip("BsmyChat");//设置托盘图标的提示信息
+    //托盘图标的点击事件
+    tray.on("click", () => {
+        mainWindow.show();
+    })
+    //托盘图标的右键菜单
+    tray.setContextMenu(Menu.buildFromTemplate([
+        {
+            label: "退出",
+            click: () => {
+                mainWindow.destroy();
+                app.quit();
+            }
+        }
+    ]))
+}
+
 //创建主窗口函数
 function createMainWindow() {
     mainWindow = new BrowserWindow({
@@ -54,6 +76,10 @@ function createMainWindow() {
         }
     });
     mainWindow.loadFile("./windows/mainWindow/mainWindow.html");
+    mainWindow.on("close", (event) => {//当窗口关闭时
+        event.preventDefault();//阻止默认行为
+        mainWindow.hide();//隐藏窗口
+    })
 };
 
 //创建更新窗口的函数
@@ -66,15 +92,14 @@ function createUpdateResultWindow() {
         }
     });
     updateResultWindow.loadFile("./windows/updateResultWindow/updateResultWindow.html");
+    updateResultWindow.on("closed", () => {//当窗口关闭时
+        updateResultWindow = null;//清理窗口变量
+    })
 };
 
 //启动应用
 app.on("ready", () => {
+    createTray();//创建系统托盘图标
     checkForUpdates();//检查更新
     createMainWindow();//创建主窗口
 });
-
-//当所有窗口都关闭时，退出软件
-app.on("window-all-closed", () => {
-    app.quit();
-})
