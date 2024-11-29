@@ -7,11 +7,12 @@ const webSocket = new WebSocket("ws://103.197.184.184:11663");
 
 //发送消息按钮点击事件
 sendMessageButton.addEventListener("click", () => {
-    inputMessage.value = "";
     webSocket.send(inputMessage.value);
+    inputMessage.value = "";
 })
 
 //webSocket消息接收事件
 webSocket.onmessage = (message) => {
     chatRecordArea.innerText = chatRecordArea.innerText + message.data + "\n";
+    chatRecordArea.scrollTop = chatRecordArea.scrollHeight;
 }

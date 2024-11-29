@@ -12,6 +12,7 @@ body {
 #chatRecordArea {
     height: 90%;
     border: 1px solid black;
+    overflow: hidden;
 }
 
 /* 输入区域 */
