@@ -7,6 +7,7 @@ const webSocket = new WebSocket("ws://103.197.184.184:11663");
 
 //发送消息按钮点击事件
 sendMessageButton.addEventListener("click", () => {
+    inputMessage.value = "";
     webSocket.send(inputMessage.value);
 })
 
