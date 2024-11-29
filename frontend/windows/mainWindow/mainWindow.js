@@ -1,0 +1,16 @@
+const chatRecordArea = document.getElementById("chatRecordArea");//聊天记录区域
+const inputMessage = document.getElementById("inputMessage");//消息输入框
+const sendMessageButton = document.getElementById("sendMessageButton");//发送消息按钮
+
+//连接websocket服务器
+const webSocket = new WebSocket("ws://103.197.184.184:11663");
+
+//发送消息按钮点击事件
+sendMessageButton.addEventListener("click", () => {
+    webSocket.send(inputMessage.value);
+})
+
+//webSocket消息接收事件
+webSocket.onmessage = (message) => {
+    chatRecordArea.innerText = chatRecordArea.innerText + message.data + "\n";
+}

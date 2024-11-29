@@ -5,6 +5,8 @@ import org.java_websocket.server.WebSocketServer;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.HashSet;
+import java.util.Set;
 
 //服务器类
 public class Server {
@@ -13,42 +15,52 @@ public class Server {
         HttpServer httpServer = HttpServer.create(new InetSocketAddress("0.0.0.0", 49152), 10);
         httpServer.createContext("/login", new LoginHandler());//创建登录处理器
         httpServer.setExecutor(null);//设置线程池，这里设置为null表示使用单线程
-        httpServer.start();
+        httpServer.start();//启动HTTP服务器
         System.out.println("HTTP服务器已启动，监听地址：0.0.0.0:49152");
 
         //创建WebSocket服务器
         WebSocketServer webSocketServer = new myWebSocketServer("0.0.0.0", 49153);
-        webSocketServer.start();
+        webSocketServer.start();//启动WebSocket服务器
     }
 
     //创建继承于WebSocketServer类的子类
     static class myWebSocketServer extends WebSocketServer {
+        //连接到服务器的对象集合
+//        Map<>
+        Set<WebSocket> webSocketSet = new HashSet<>();
+
+        //构造函数
         myWebSocketServer(String host, int port) {
             super(new InetSocketAddress(host, port));
         }
 
         @Override
-        public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {
-            System.out.println("WebSocket连接成功");
+        public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {//连接建立时调用
+            System.out.println(webSocket.getRemoteSocketAddress().getAddress().getHostAddress() + "已连接");
+            webSocketSet.add(webSocket);//将连接到服务器的对象添加到集合中
         }
 
         @Override
-        public void onClose(WebSocket webSocket, int i, String s, boolean b) {
-
+        public void onClose(WebSocket webSocket, int i, String s, boolean b) {//连接关闭时调用
+            System.out.println(webSocket.getRemoteSocketAddress().getAddress().getHostAddress() + "已断开");
+            webSocketSet.remove(webSocket);//将断开连接的对象从集合中移除
         }
 
         @Override
-        public void onMessage(WebSocket webSocket, String s) {
-
+        public void onMessage(WebSocket webSocket, String s) {//接收到消息时调用
+//            System.out.println("收到消息：" + s);
+            for (WebSocket webSocket1 : webSocketSet) {//向所有连接到服务器的对象发送消息
+                webSocket1.send(s);//向所有连接到服务器的对象发送消息
+            }
         }
 
         @Override
-        public void onError(WebSocket webSocket, Exception e) {
+        public void onError(WebSocket webSocket, Exception e) {//出现错误时调用
             e.printStackTrace();
         }
 
         @Override
-        public void onStart() {
+        public void onStart() {//服务器启动时调用
             System.out.println("WebSocket服务器已启动，监听地址：0.0.0.0:49153");
         }
     }
