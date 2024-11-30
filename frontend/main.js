@@ -2,9 +2,10 @@ const { app, BrowserWindow, ipcMain, Tray, Menu, nativeImage } = require("electr
 const { autoUpdater } = require("electron-updater");
 const path = require("node:path");
 
-let mainWindow = null;//主窗口变量
-let updateResultWindow = null;//更新窗口变量
-let tray = null;//托盘图标变量
+let mainWindow = null;          //声明主窗口变量
+let updateResultWindow = null;  //声明更新窗口变量
+let loginWindow = null;         //声明登录窗口变量
+let tray = null;                //声明系统托盘图标变量
 
 //检查更新函数
 function checkForUpdates() {
@@ -69,8 +70,8 @@ function createTray() {
 //创建主窗口函数
 function createMainWindow() {
     mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 600,
+        height: 400,
         webPreferences: {
             preload: path.join(__dirname, "preload.js")
         }
@@ -86,7 +87,7 @@ function createMainWindow() {
 function createUpdateResultWindow() {
     updateResultWindow = new BrowserWindow({
         width: 300,
-        height: 150,
+        height: 200,
         webPreferences: {
             preload: path.join(__dirname, "preload.js")
         }
@@ -97,9 +98,27 @@ function createUpdateResultWindow() {
     })
 };
 
+//创建登录窗口的函数
+function createLoginWindow() {
+    loginWindow = new BrowserWindow({
+        width: 600,
+        height: 400,
+        webPreferences: {
+            preload: path.join(__dirname, "preload.js")
+        }
+    })
+    loginWindow.loadFile("./windows/loginWindow/loginWindow.html");
+}
+
 //启动应用
 app.on("ready", () => {
     createTray();//创建系统托盘图标
     checkForUpdates();//检查更新
-    createMainWindow();//创建主窗口
+    createLoginWindow();//创建登录窗口
+});
+
+//监听创建主窗口请求
+ipcMain.on("createMainWindow", (event) => {
+    createMainWindow();
+    loginWindow.destroy();
 });

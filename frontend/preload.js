@@ -45,5 +45,10 @@ contextBridge.exposeInMainWorld("myAPI", {
     //发送安装更新请求
     sendQuitAndInstall: () => {
         ipcRenderer.send("quitAndInstall");
+    },
+
+    //发送创建主窗口请求
+    sendCreateMainWindow: () => {
+        ipcRenderer.send("createMainWindow");
     }
 });

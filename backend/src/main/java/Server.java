@@ -56,7 +56,7 @@ public class Server {
 
         @Override
         public void onError(WebSocket webSocket, Exception e) {//出现错误时调用
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
 
         @Override
