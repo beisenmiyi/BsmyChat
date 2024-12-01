@@ -1,6 +1,10 @@
 {
   "name": "bsmychat",
+<<<<<<< HEAD
+  "version": "1.4.1",
+=======
   "version": "1.4.0",
+>>>>>>> 2537d901fdd2024cbed56de836a43f8a3d39b582
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

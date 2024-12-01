@@ -1,24 +1,24 @@
-const updateResultWindow = document.getElementById("updateResultWindow");//内容显示区
-const downloadOrInstallBtn = document.getElementById("downloadOrInstallBtn");//下载或安装更新按钮
+const updateResult = document.getElementById("updateResult");                   //更新结果
+const downloadOrInstallBtn = document.getElementById("downloadOrInstallBtn");   //下载或安装更新按钮
 
 //监听更新信息
 window.myAPI.onUpdateAvailable((event, info) => {
-    updateResultWindow.textContent = "发现新版本v" + info.version;
+    updateResult.innerText = "发现新版本v" + info.version + "\n" + "更新内容：" + info.releaseNotes;
 });
 
 //监听更新错误信息
 window.myAPI.onError((event, error) => {
-    updateResultWindow.textContent = "检查更新出错啦，可能是您的网络问题，请稍后再试，或者前往https://github.com/beisenmiyi/BsmyChat/releases下载最新版本";
+    updateResult.textContent = "检查更新出错啦，可能是您的网络问题，请稍后再试，或者前往https://github.com/beisenmiyi/BsmyChat/releases下载最新版本";
 });
 
 //监听下载进度信息
 window.myAPI.onDownloadProgress((event, progressObj) => {
-    updateResultWindow.textContent = "下载中：" + progressObj.percent + "%";
+    updateResult.textContent = "下载中：" + progressObj.percent + "%";
 });
 
 //监听下载完成信息
 window.myAPI.onUpdateDownloaded((event) => {
-    updateResultWindow.textContent = "下载完成"
+    updateResult.textContent = "下载完成"
     downloadOrInstallBtn.textContent = "立即安装";
 });
 

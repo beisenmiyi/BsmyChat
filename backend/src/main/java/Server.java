@@ -5,15 +5,18 @@ import org.java_websocket.server.WebSocketServer;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 //服务器类
 public class Server {
     public static void main(String[] args) throws IOException {
         //创建HTTP服务器
         HttpServer httpServer = HttpServer.create(new InetSocketAddress("0.0.0.0", 49152), 10);
-        httpServer.createContext("/login", new LoginHandler());//创建登录处理器
+        httpServer.createContext("/login", new LoginHandler());         //创建登录处理器
+        httpServer.createContext("/register", new RegisterHandler());   //创建注册处理器
         httpServer.setExecutor(null);//设置线程池，这里设置为null表示使用单线程
         httpServer.start();//启动HTTP服务器
         System.out.println("HTTP服务器已启动，监听地址：0.0.0.0:49152");
@@ -26,8 +29,7 @@ public class Server {
     //创建继承于WebSocketServer类的子类
     static class myWebSocketServer extends WebSocketServer {
         //连接到服务器的对象集合
-//        Map<>
-        Set<WebSocket> webSocketSet = new HashSet<>();
+        Map<String, WebSocket> webSocketMap = new HashMap<>();
 
         //构造函数
         myWebSocketServer(String host, int port) {
@@ -36,20 +38,27 @@ public class Server {
 
         @Override
         public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {//连接建立时调用
-            System.out.println(webSocket.getRemoteSocketAddress().getAddress().getHostAddress() + "已连接");
-            webSocketSet.add(webSocket);//将连接到服务器的对象添加到集合中
+            String query = clientHandshake.getResourceDescriptor();
+            String username = query.split("=")[1];
+//            System.out.println(username);
+            webSocketMap.put(username, webSocket);//将连接到服务器的对象添加到集合中
+            System.out.println(username + "\t" + "已连接" + "\t" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         }
 
         @Override
         public void onClose(WebSocket webSocket, int i, String s, boolean b) {//连接关闭时调用
-            System.out.println(webSocket.getRemoteSocketAddress().getAddress().getHostAddress() + "已断开");
-            webSocketSet.remove(webSocket);//将断开连接的对象从集合中移除
+            for (Map.Entry<String, WebSocket> entry : webSocketMap.entrySet()) {
+                if (entry.getValue() == webSocket) {
+                    webSocketMap.remove(entry.getKey());//将断开连接的对象从集合中移除
+                    System.out.println(entry.getKey() + "\t" + "已断开" + "\t" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                    return;
+                }
+            }
         }
 
         @Override
         public void onMessage(WebSocket webSocket, String s) {//接收到消息时调用
-//            System.out.println("收到消息：" + s);
-            for (WebSocket webSocket1 : webSocketSet) {//向所有连接到服务器的对象发送消息
+            for (WebSocket webSocket1 : webSocketMap.values()) {//向所有连接到服务器的对象发送消息
                 webSocket1.send(s);//向所有连接到服务器的对象发送消息
             }
         }

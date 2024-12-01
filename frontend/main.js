@@ -5,7 +5,14 @@ const path = require("node:path");
 let mainWindow = null;          //声明主窗口变量
 let updateResultWindow = null;  //声明更新窗口变量
 let loginWindow = null;         //声明登录窗口变量
+<<<<<<< HEAD
+let registerWindow = null;      //声明注册窗口变量
+
 let tray = null;                //声明系统托盘图标变量
+let username = null;            //声明用户名变量
+=======
+let tray = null;                //声明系统托盘图标变量
+>>>>>>> 2537d901fdd2024cbed56de836a43f8a3d39b582
 
 //检查更新函数
 function checkForUpdates() {
@@ -81,6 +88,10 @@ function createMainWindow() {
         event.preventDefault();//阻止默认行为
         mainWindow.hide();//隐藏窗口
     })
+    //当主窗口加载完毕时
+    mainWindow.webContents.on("did-finish-load", () => {
+        mainWindow.webContents.send("username", username);  //发送用户名到主窗口
+    })
 };
 
 //创建更新窗口的函数
@@ -101,8 +112,13 @@ function createUpdateResultWindow() {
 //创建登录窗口的函数
 function createLoginWindow() {
     loginWindow = new BrowserWindow({
+<<<<<<< HEAD
+        width: 300,
+        height: 200,
+=======
         width: 600,
         height: 400,
+>>>>>>> 2537d901fdd2024cbed56de836a43f8a3d39b582
         webPreferences: {
             preload: path.join(__dirname, "preload.js")
         }
@@ -110,6 +126,21 @@ function createLoginWindow() {
     loginWindow.loadFile("./windows/loginWindow/loginWindow.html");
 }
 
+<<<<<<< HEAD
+//创建注册窗口的函数
+function createRegisterWindow() {
+    registerWindow = new BrowserWindow({
+        width: 300,
+        height: 200,
+        webPreferences: {
+            preload: path.join(__dirname, "preload.js")
+        }
+    })
+    registerWindow.loadFile("./windows/registerWindow/registerWindow.html")
+}
+
+=======
+>>>>>>> 2537d901fdd2024cbed56de836a43f8a3d39b582
 //启动应用
 app.on("ready", () => {
     createTray();//创建系统托盘图标
@@ -121,4 +152,18 @@ app.on("ready", () => {
 ipcMain.on("createMainWindow", (event) => {
     createMainWindow();
     loginWindow.destroy();
+<<<<<<< HEAD
 });
+
+//监听创建注册窗口请求
+ipcMain.on("createRegisterWindow", (event) => {
+    createRegisterWindow();//创建注册窗口
+})
+
+//转发登录窗口中的用户名到主窗口以，连接到WebSocket服务器
+ipcMain.on("username", (event, newUsername) => {
+    username = newUsername;
+})
+=======
+});
+>>>>>>> 2537d901fdd2024cbed56de836a43f8a3d39b582
