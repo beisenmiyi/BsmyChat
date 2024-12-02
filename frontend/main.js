@@ -62,7 +62,9 @@ function createTray() {
         {
             label: "退出",
             click: () => {
-                mainWindow.destroy();//销毁主窗口
+                if (mainWindow !== null) {
+                    mainWindow.destroy();//销毁主窗口
+                }
                 app.quit();//退出应用
             }
         }
