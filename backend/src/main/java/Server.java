@@ -39,9 +39,8 @@ public class Server {
         @Override
         public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {//连接建立时调用
             String query = clientHandshake.getResourceDescriptor();
-            String username = query.split("=")[1];
-//            System.out.println(username);
-            webSocketMap.put(username, webSocket);//将连接到服务器的对象添加到集合中
+            String username = query.split("=")[1];            //获取连接到服务器的对象的用户名
+            webSocketMap.put(username, webSocket);                  //将连接到服务器的对象添加到集合中
             System.out.println(username + "\t" + "已连接" + "\t" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         }
 
@@ -61,7 +60,7 @@ public class Server {
             for (Map.Entry<String, WebSocket> entry : webSocketMap.entrySet()) {
                 if (entry.getValue() == webSocket) {                                        //获取发送消息的对象的用户名
                     for (Map.Entry<String, WebSocket> entry1 : webSocketMap.entrySet()) {   //向所有连接到服务器的对象发送消息
-                        entry1.getValue().send(entry.getKey() + ": " + s);
+                        entry1.getValue().send(entry.getKey() + ": " + s);               //发送消息
                     }
                     return;
                 }

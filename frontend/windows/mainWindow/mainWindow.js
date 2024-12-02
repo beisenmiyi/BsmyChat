@@ -25,11 +25,13 @@ window.myAPI.onUsername((event, username) => {
         chatRecordArea.innerText = chatRecordArea.innerText + message.data + "\n";//更新聊天记录
         chatRecordArea.scrollTop = chatRecordArea.scrollHeight; //滚动条滚动到底部
         //显示通知
-        new Notification("新消息", {
-            body: message.data,
-            icon: BSMYPngPath
-        }).onclick = () => {
-            window.myAPI.sendShowMainWindow();
+        if (message.data.split(":")[0] !== username) {
+            new Notification("新消息", {
+                body: message.data,
+                icon: BSMYPngPath
+            }).onclick = () => {
+                window.myAPI.sendShowMainWindow();
+            }
         }
     }
 })

@@ -1,9 +1,12 @@
 const updateResult = document.getElementById("updateResult");                   //更新结果
 const downloadOrInstallBtn = document.getElementById("downloadOrInstallBtn");   //下载或安装更新按钮
 
+let tempUpdateResult = "";      //存放临时的更新信息
+
 //监听更新信息
 window.myAPI.onUpdateAvailable((event, info) => {
     updateResult.innerText = "发现新版本v" + info.version + "\n" + "更新内容：" + "\n" + info.releaseNotes;
+    tempUpdateResult = updateResult.innerText;  //存放临时的更新信息
 });
 
 //监听更新错误信息
@@ -13,7 +16,7 @@ window.myAPI.onError((event, error) => {
 
 //监听下载进度信息
 window.myAPI.onDownloadProgress((event, progressObj) => {
-    updateResult.textContent = "下载中：" + progressObj.percent + "%";
+    updateResult.textContent = tempUpdateResult + "\n" + "下载中：" + progressObj.percent + "%";
 });
 
 //监听下载完成信息
