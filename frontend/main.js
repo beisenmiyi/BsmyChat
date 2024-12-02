@@ -88,6 +88,11 @@ function createMainWindow() {
     //当主窗口加载完毕时
     mainWindow.webContents.on("did-finish-load", () => {
         mainWindow.webContents.send("username", username);  //发送用户名到主窗口
+        mainWindow.webContents.send("BSMYPngPath", path.join(__dirname, "images", "BSMY.png"));  //发送BSMY.png路径到主窗口
+    })
+    //当接收到显示主窗口请求时
+    ipcMain.on("showMainWindow", (event) => {
+        mainWindow.show();
     })
 };
 
@@ -132,9 +137,10 @@ function createRegisterWindow() {
 
 //启动应用
 app.on("ready", () => {
-    createTray();//创建系统托盘图标
-    checkForUpdates();//检查更新
-    createLoginWindow();//创建登录窗口
+    Menu.setApplicationMenu(null)   //删除默认菜单
+    createTray();                   //创建系统托盘图标
+    checkForUpdates();              //检查更新
+    createLoginWindow();            //创建登录窗口
 });
 
 //监听创建主窗口请求

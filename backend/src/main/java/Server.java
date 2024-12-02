@@ -58,8 +58,13 @@ public class Server {
 
         @Override
         public void onMessage(WebSocket webSocket, String s) {//接收到消息时调用
-            for (WebSocket webSocket1 : webSocketMap.values()) {//向所有连接到服务器的对象发送消息
-                webSocket1.send(s);//向所有连接到服务器的对象发送消息
+            for (Map.Entry<String, WebSocket> entry : webSocketMap.entrySet()) {
+                if (entry.getValue() == webSocket) {                                        //获取发送消息的对象的用户名
+                    for (Map.Entry<String, WebSocket> entry1 : webSocketMap.entrySet()) {   //向所有连接到服务器的对象发送消息
+                        entry1.getValue().send(entry.getKey() + ": " + s);
+                    }
+                    return;
+                }
             }
         }
 

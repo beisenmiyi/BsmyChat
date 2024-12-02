@@ -2,6 +2,8 @@ const chatRecordArea = document.getElementById("chatRecordArea");//聊天记录�
 const inputMessage = document.getElementById("inputMessage");//消息输入框
 const sendMessageButton = document.getElementById("sendMessageButton");//发送消息按钮
 
+let BSMYPngPath = null;                     //BSMY.png路径
+
 //当接收到用户名时
 window.myAPI.onUsername((event, username) => {
     
@@ -13,9 +15,21 @@ window.myAPI.onUsername((event, username) => {
         inputMessage.value = "";
     });
 
+    //获取BSMY.png路径
+    window.myAPI.onBSMYPngPath((event, newBSMYPngPath) => {
+        BSMYPngPath = newBSMYPngPath;
+    });
+
     //webSocket消息接收事件
     webSocket.onmessage = (message) => {
-    chatRecordArea.innerText = chatRecordArea.innerText + message.data + "\n";
-    chatRecordArea.scrollTop = chatRecordArea.scrollHeight;
-}
+        chatRecordArea.innerText = chatRecordArea.innerText + message.data + "\n";//更新聊天记录
+        chatRecordArea.scrollTop = chatRecordArea.scrollHeight; //滚动条滚动到底部
+        //显示通知
+        new Notification("新消息", {
+            body: message.data,
+            icon: BSMYPngPath
+        }).onclick = () => {
+            window.myAPI.sendShowMainWindow();
+        }
+    }
 })

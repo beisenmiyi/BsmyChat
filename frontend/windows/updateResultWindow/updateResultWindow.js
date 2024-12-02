@@ -3,7 +3,7 @@ const downloadOrInstallBtn = document.getElementById("downloadOrInstallBtn");   
 
 //监听更新信息
 window.myAPI.onUpdateAvailable((event, info) => {
-    updateResult.innerText = "发现新版本v" + info.version + "\n" + "更新内容：" + info.releaseNotes;
+    updateResult.innerText = "发现新版本v" + info.version + "\n" + "更新内容：" + "\n" + info.releaseNotes;
 });
 
 //监听更新错误信息

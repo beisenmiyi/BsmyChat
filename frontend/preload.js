@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer } = require("electron")
+const { contextBridge, ipcRenderer, } = require("electron")
 
 contextBridge.exposeInMainWorld("myAPI", {
     //监听“有可用更新”事件
@@ -46,6 +46,15 @@ contextBridge.exposeInMainWorld("myAPI", {
         }
     },
 
+    //监听BSMY.png路径信息
+    onBSMYPngPath: (callback) => {
+        if (typeof callback === "function") {
+            ipcRenderer.on("BSMYPngPath", callback);
+        } else {
+            console.error("callback is not a function");
+        }
+    },
+
     //发送下载更新请求
     sendDownloadUpdate: () => {
         ipcRenderer.send("downloadUpdate");
@@ -69,5 +78,10 @@ contextBridge.exposeInMainWorld("myAPI", {
     //发送用户名信息
     sendUsername: (username) => {
         ipcRenderer.send("username", username);
+    },
+
+    //发送显示主窗口请求
+    sendShowMainWindow: () => {
+        ipcRenderer.send("showMainWindow");
     }
 });
