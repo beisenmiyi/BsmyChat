@@ -59,18 +59,15 @@ contextBridge.exposeInMainWorld("myAPI", {
     //发送创建主窗口请求
     sendCreateMainWindow: () => {
         ipcRenderer.send("createMainWindow");
-<<<<<<< HEAD
     },
 
-    //发送创建注册窗口请求
+    //发送注册窗口请求
     sendCreateRegisterWindow: () => {
         ipcRenderer.send("createRegisterWindow");
     },
 
-    //发送用户名变量
+    //发送用户名信息
     sendUsername: (username) => {
         ipcRenderer.send("username", username);
-=======
->>>>>>> 2537d901fdd2024cbed56de836a43f8a3d39b582
     }
 });

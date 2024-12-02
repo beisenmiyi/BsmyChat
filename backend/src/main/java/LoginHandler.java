@@ -12,7 +12,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class LoginHandler implements HttpHandler {
-<<<<<<< HEAD
 
     @Override
     public void handle(HttpExchange httpExchange) {
@@ -25,18 +24,6 @@ public class LoginHandler implements HttpHandler {
                 System.out.println(e.getMessage());
             }
 
-=======
-    public void handle(HttpExchange exchange) {
-        Data data = new Data();                                                     //声明一个存放信息的data
-        if (exchange.getRequestMethod().equalsIgnoreCase("POST")) {     //如果请求方法是POST
-            try (InputStream inputStream = exchange.getRequestBody();               //获取请求体放入输入流inputStream
-                 Reader reader = new InputStreamReader(inputStream)) {              //读取输入流inputStream放入reader
-                data = new ObjectMapper().readValue(reader, Data.class);            //将结果reader转换为Data对象
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-
->>>>>>> 2537d901fdd2024cbed56de836a43f8a3d39b582
             String sql = "SELECT * FROM user WHERE username = ? AND password = ?";
             try (Connection connection = ConnectDatabase.getConnection();                   //获取数据库连接connection
                  PreparedStatement preparedStatement = connection.prepareStatement(sql)) {  //获取预编译语句preparedStatement
@@ -44,15 +31,9 @@ public class LoginHandler implements HttpHandler {
                 preparedStatement.setString(2, data.getPassword());             //设置密码参数
                 ResultSet resultSet = preparedStatement.executeQuery();            //执行查询语句并获取结果集resultSet
                 if (resultSet.next()) {
-<<<<<<< HEAD
                     httpExchange.sendResponseHeaders(200, 0);
                 } else {
                     httpExchange.sendResponseHeaders(401, 0);
-=======
-                    exchange.sendResponseHeaders(200, 0);
-                } else {
-                    exchange.sendResponseHeaders(401, 0);
->>>>>>> 2537d901fdd2024cbed56de836a43f8a3d39b582
                 }
             } catch (SQLException | IOException e) {
                 System.out.println(e.getMessage());
