@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain, Tray, Menu, nativeImage } = require("electron");
 const { autoUpdater } = require("electron-updater");
 const path = require("node:path");
+const fs = require("fs");
 
 let mainWindow = null;          //声明主窗口变量
 let updateResultWindow = null;  //声明更新窗口变量
@@ -74,8 +75,8 @@ function createTray() {
 //创建主窗口函数
 function createMainWindow() {
     mainWindow = new BrowserWindow({
-        width: 600,
-        height: 400,
+        width: 1200,
+        height: 800,
         webPreferences: {
             preload: path.join(__dirname, "preload.js")
         }
@@ -157,4 +158,20 @@ ipcMain.on("createRegisterWindow", (event) => {
 //转发登录窗口中的用户名到主窗口以，连接到WebSocket服务器
 ipcMain.on("username", (event, newUsername) => {
     username = newUsername;
+})
+
+//监听更新记录到文件请求
+ipcMain.on("UpdateChatHistoryToFile", (event, contacts, newChatHistory) => {
+    const ChatHistoryToFilePath = path.join("C:", "Bsmy", "BsmyChat", "ChatHistory");//获取聊天记录保存路径
+    let chatHistoryDocument = `${contacts}.txt`;//聊天记录文件名
+    fs.mkdir(ChatHistoryToFilePath, { recursive: true }, (err) => {
+        if (err) {
+            console.log(err);
+        }
+    })
+    fs.appendFileSync(path.join("C:", "Bsmy", "BsmyChat", "ChatHistory", chatHistoryDocument), newChatHistory, (err) => {
+        if (err) {
+            console.log(err);
+        }
+    })
 })

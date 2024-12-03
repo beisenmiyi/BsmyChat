@@ -1,6 +1,6 @@
-const updateInfo = document.getElementById("updateInfo");                       //更新结果元素
-const downloadOrInstallBtn = document.getElementById("downloadOrInstallBtn");   //下载或安装更新按钮
+const updateInfo = document.getElementById("updateInfo");                       //更新信息元素
 const downloadProgress = document.getElementById("downloadProgress");           //下载进度元素
+const downloadOrInstallBtn = document.getElementById("downloadOrInstallBtn");   //下载或安装更新按钮
 
 //监听更新信息
 window.myAPI.onUpdateAvailable((event, info) => {

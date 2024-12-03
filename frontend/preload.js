@@ -83,5 +83,11 @@ contextBridge.exposeInMainWorld("myAPI", {
     //发送显示主窗口请求
     sendShowMainWindow: () => {
         ipcRenderer.send("showMainWindow");
+    },
+
+    //发送更新记录到文件请求
+    sendUpdateChatHistoryToFile: (contacts, newChatHistory) => {
+        ipcRenderer.send("UpdateChatHistoryToFile", contacts, newChatHistory);
     }
+
 });

@@ -1,3 +1,5 @@
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpServer;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
@@ -57,12 +59,22 @@ public class Server {
 
         @Override
         public void onMessage(WebSocket webSocket, String s) {//接收到消息时调用
-            for (Map.Entry<String, WebSocket> entry : webSocketMap.entrySet()) {
-                if (entry.getValue() == webSocket) {                                        //获取发送消息的对象的用户名
-                    for (Map.Entry<String, WebSocket> entry1 : webSocketMap.entrySet()) {   //向所有连接到服务器的对象发送消息
-                        entry1.getValue().send(entry.getKey() + ": " + s);               //发送消息
+            Data data;
+            try {
+                data = new ObjectMapper().readValue(s, Data.class);    //解析消息，主要为了获取发送者和接收者的用户名和消息内容
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            if (data.getContacts().equalsIgnoreCase("public")) {
+                for (Map.Entry<String, WebSocket> entry : webSocketMap.entrySet()) {
+                    entry.getValue().send(data.getUsername() + ": " + data.getMessage());
+                }
+            } else {
+                for (Map.Entry<String, WebSocket> entry : webSocketMap.entrySet()) {
+                    if (entry.getKey().equalsIgnoreCase(data.getContacts())) {
+                        entry.getValue().send(data.getUsername() + ": " + data.getMessage());
+                        break;
                     }
-                    return;
                 }
             }
         }
