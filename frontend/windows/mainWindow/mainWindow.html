@@ -9,15 +9,17 @@
 <body>
     <div id="root"><!--根标签-->
         <div id="contactsList"><!-- 联系人列表区域 -->
-            <ul>
-                <li>public</li>
-            </ul>
+            <div id="contactSearchArea">
+                <input id="contactSearchInput" type="text">
+                <button id="addContactsButton">添加联系人</button>
+            </div>
+            <ul id="contactsListUl"></ul>
         </div>
         <div id="chatWindow">
             <div id="chatHeader"></div>
             <div id="chatRecordArea"></div><!-- 聊天记录区域 -->
             <div id="messageInputArea">
-                <input type="text" id="inputMessage"><!-- 消息输入框 -->
+                <textarea name="" id="inputMessage"></textarea><!-- 消息输入框 -->
                 <button id="sendMessageButton">发送</button>
             </div>
         </div>

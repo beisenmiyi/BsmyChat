@@ -1,0 +1,76 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+
+#root {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#container {
+    width: 300px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#usernameInput {
+    height: 40px;
+    border: none;
+    border-radius: 6px;
+    box-shadow: 0px 0px 5px 0px #000000;
+}
+
+#usernameInput:focus {
+    outline: none;
+}
+
+#passwordInput {
+    height: 40px;
+    border: none;
+    border-radius: 6px;
+    box-shadow: 0px 0px 5px 0px #000000;
+}
+
+#passwordInput:focus {
+    outline: none;
+}
+
+#loginButton {
+    height: 40px;
+    border: none;
+    border-radius: 6px;
+    background-color: rgb(0,150, 250);
+    color: #ffffff;
+}
+
+#loginButton:hover {
+    cursor: pointer;
+    background-color: rgb(0, 100, 200);
+}
+
+#register {
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#register button {
+    color: rgb(0, 150, 250);
+    border: none;
+    background-color: #ffffff;
+    font-size: 16px;
+}
+
+#register button:hover {
+    cursor: pointer;
+}
+
+#loginResult {
+    height: 30px;
+    color: #ff0000;
+}

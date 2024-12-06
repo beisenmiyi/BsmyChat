@@ -10,15 +10,6 @@ contextBridge.exposeInMainWorld("myAPI", {
         }
     },
 
-    //监听error事件
-    onError: (callback) => {
-        if (typeof callback === "function") {
-            ipcRenderer.on("error", callback);
-        } else {
-            console.error("callback is not a function");
-        }
-    },
-
     //监听下载进度信息
     onDownloadProgress: (callback) => {
         if (typeof callback === "function") {
@@ -70,11 +61,6 @@ contextBridge.exposeInMainWorld("myAPI", {
         ipcRenderer.send("createMainWindow");
     },
 
-    //发送注册窗口请求
-    sendCreateRegisterWindow: () => {
-        ipcRenderer.send("createRegisterWindow");
-    },
-
     //发送用户名信息
     sendUsername: (username) => {
         ipcRenderer.send("username", username);
@@ -86,8 +72,17 @@ contextBridge.exposeInMainWorld("myAPI", {
     },
 
     //发送更新记录到文件请求
-    sendUpdateChatHistoryToFile: (contacts, newChatHistory) => {
-        ipcRenderer.send("UpdateChatHistoryToFile", contacts, newChatHistory);
-    }
+    sendUpdateChatHistoryToFile: (messageData) => {
+        ipcRenderer.send("UpdateChatHistoryToFile", messageData);
+    },
 
+    //发送读取聊天记录的请求
+    sendReadChatHistory: (contacts) => {
+        return ipcRenderer.invoke("ReadChatHistory", contacts);
+    },
+
+    //发送log信息到控制台
+    sendLog: (log) => {
+        ipcRenderer.send("log", log);
+    }
 });

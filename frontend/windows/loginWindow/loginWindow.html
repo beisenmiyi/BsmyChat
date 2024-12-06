@@ -3,16 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>loginWindow</title>
+    <title>登录</title>
     <link rel="stylesheet" href="./loginWindow.css">
 </head>
 <body>
     <div id="root">
-        <input type="text" id="usernameInput" placeholder="用户名"><br>
-        <input type="password" id="passwordInput" placeholder="密码"><br>
-        <button id="loginButton">登录</button>
-        <button id="registerButton">注册</button>
-        <div id="loginResult"></div>
+        <form action="">
+            <div id="container">
+                <input type="text" id="usernameInput" placeholder="用户名" required><br>
+                <input type="password" id="passwordInput" placeholder="密码" required><br>
+                <button id="loginButton">登录</button>
+                <div id="register">
+                    <button id="registerButton">没有账号？</button>
+                    <button>忘记密码?</button>
+                </div>
+                <div id="loginResult"></div>
+            </div>
+        </form>
     </div>
 
     <script src="./loginWindow.js"></script>

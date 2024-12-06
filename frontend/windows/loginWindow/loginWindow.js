@@ -6,6 +6,7 @@ const loginResult = document.getElementById("loginResult");        //获取登�
 
 // 监听登录按钮点击事件
 loginButton.addEventListener("click", async (event) => {
+    event.preventDefault();    //阻止默认行为
     loginResult.innerText = "";    //清空登录结果元素的内容
     try {
         //连接HTTP服务器并发出登录请求
@@ -32,5 +33,6 @@ loginButton.addEventListener("click", async (event) => {
 
 // 监听注册按钮点击事件
 registerButton.addEventListener("click", (event) => {
-    window.myAPI.sendCreateRegisterWindow();    //发送创建注册窗口的消息
+    event.preventDefault();    //阻止默认行为
+    window.location.href = "../registerWindow/registerWindow.html";    //跳转到注册页面
 })

@@ -14,9 +14,18 @@ import java.sql.SQLException;
 public class LoginHandler implements HttpHandler {
 
     @Override
-    public void handle(HttpExchange httpExchange) {
+    public void handle(HttpExchange httpExchange) throws IOException {
         Data data = new Data();                                                     //声明一个存放信息的data
+        if (httpExchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
+            httpExchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
+            httpExchange.getResponseHeaders().add("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+            httpExchange.getResponseHeaders().add("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Accept, Origin");
+            httpExchange.sendResponseHeaders(200, 0);
+        }
         if (httpExchange.getRequestMethod().equalsIgnoreCase("POST")) {     //如果请求方法是POST
+            httpExchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
+            httpExchange.getResponseHeaders().add("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+            httpExchange.getResponseHeaders().add("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Accept, Origin");
             try (InputStream inputStream = httpExchange.getRequestBody();               //获取请求体放入输入流inputStream
                  Reader reader = new InputStreamReader(inputStream)) {              //读取输入流inputStream放入reader
                 data = new ObjectMapper().readValue(reader, Data.class);            //将结果reader转换为Data对象

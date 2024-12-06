@@ -6,7 +6,6 @@ const fs = require("fs");
 let mainWindow = null;          //声明主窗口变量
 let updateResultWindow = null;  //声明更新窗口变量
 let loginWindow = null;         //声明登录窗口变量
-let registerWindow = null;      //声明注册窗口变量
 let tray = null;                //声明系统托盘图标变量
 let username = null;            //声明用户名变量
 
@@ -18,12 +17,6 @@ function checkForUpdates() {
     autoUpdater.on("update-available", (info) => {
         createUpdateResultWindow();//创建更新窗口
         updateResultWindow.webContents.send("updateAvailable", info);//发送更新信息到更新窗口
-    });
-
-    //更新检测失败时
-    autoUpdater.on("error", (error) => {
-        createUpdateResultWindow();
-        updateResultWindow.webContents.send("error", error);//发送错误信息到更新窗口
     });
 
     //下载完成时
@@ -79,7 +72,8 @@ function createMainWindow() {
         height: 800,
         webPreferences: {
             preload: path.join(__dirname, "preload.js")
-        }
+        },
+        icon: path.join(__dirname, "images", "BSMY.png")
     });
     mainWindow.loadFile("./windows/mainWindow/mainWindow.html");
     mainWindow.on("close", (event) => {//当窗口关闭时
@@ -104,7 +98,8 @@ function createUpdateResultWindow() {
         height: 200,
         webPreferences: {
             preload: path.join(__dirname, "preload.js")
-        }
+        },
+        icon: path.join(__dirname, "images", "BSMY.png")
     });
     updateResultWindow.loadFile("./windows/updateResultWindow/updateResultWindow.html");
     updateResultWindow.on("closed", () => {//当窗口关闭时
@@ -115,25 +110,14 @@ function createUpdateResultWindow() {
 //创建登录窗口的函数
 function createLoginWindow() {
     loginWindow = new BrowserWindow({
-        width: 300,
-        height: 200,
+        width: 600,
+        height: 400,
         webPreferences: {
             preload: path.join(__dirname, "preload.js")
-        }
+        },
+        icon: path.join(__dirname, "images", "BSMY.png")
     })
     loginWindow.loadFile("./windows/loginWindow/loginWindow.html");
-}
-
-//创建注册窗口的函数
-function createRegisterWindow() {
-    registerWindow = new BrowserWindow({
-        width: 300,
-        height: 200,
-        webPreferences: {
-            preload: path.join(__dirname, "preload.js")
-        }
-    })
-    registerWindow.loadFile("./windows/registerWindow/registerWindow.html")
 }
 
 //启动应用
@@ -150,28 +134,44 @@ ipcMain.on("createMainWindow", (event) => {
     loginWindow.destroy();
 });
 
-//监听创建注册窗口请求
-ipcMain.on("createRegisterWindow", (event) => {
-    createRegisterWindow();//创建注册窗口
-})
-
 //转发登录窗口中的用户名到主窗口以，连接到WebSocket服务器
 ipcMain.on("username", (event, newUsername) => {
     username = newUsername;
 })
 
 //监听更新记录到文件请求
-ipcMain.on("UpdateChatHistoryToFile", (event, contacts, newChatHistory) => {
-    const ChatHistoryToFilePath = path.join("C:", "Bsmy", "BsmyChat", "ChatHistory");//获取聊天记录保存路径
+ipcMain.on("UpdateChatHistoryToFile", (event, messageData) => {
+    let ChatHistoryToFilePath = path.join("C:", "BSMY", "BsmyChat", "ChatHistory", username);//获取聊天记录保存路径
+    let chatHistoryDocument = `${messageData[1]}.txt`;//聊天记录文件名
+    fs.appendFile(
+        path.join(ChatHistoryToFilePath, chatHistoryDocument), 
+        messageData[0] + ": " + messageData[2] + "\n",
+        "utf-8",
+        (error) => {
+            if (error) {
+                console.log(error);
+            }
+        }
+    )
+})
+
+//监听读取聊天记录请求
+ipcMain.handle("ReadChatHistory", (event, contacts) => {
+    let chatHistoryToFilePath = path.join("C:", "BSMY", "BsmyChat", "ChatHistory", username);//获取聊天记录保存路径
     let chatHistoryDocument = `${contacts}.txt`;//聊天记录文件名
-    fs.mkdir(ChatHistoryToFilePath, { recursive: true }, (err) => {
-        if (err) {
-            console.log(err);
+    //创建聊天记录保存路径
+    fs.mkdir(chatHistoryToFilePath, { recursive: true }, (error) => {
+        if (error) {
+            console.log(error);
         }
     })
-    fs.appendFileSync(path.join("C:", "Bsmy", "BsmyChat", "ChatHistory", chatHistoryDocument), newChatHistory, (err) => {
-        if (err) {
-            console.log(err);
-        }
-    })
+    if (!fs.existsSync(path.join(chatHistoryToFilePath, chatHistoryDocument))) {
+        fs.writeFileSync(path.join(chatHistoryToFilePath, chatHistoryDocument), "");
+    }
+    return fs.readFileSync(path.join(chatHistoryToFilePath, chatHistoryDocument), "utf-8");
+})
+
+//监听log请求
+ipcMain.on("log", (event, log) => {
+    console.log(log);
 })

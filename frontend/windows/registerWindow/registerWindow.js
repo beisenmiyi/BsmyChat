@@ -3,6 +3,7 @@ const username = document.getElementById("username");               //获取用�
 const password = document.getElementById("password");               //获取密码输入框元素
 const confirmPassword = document.getElementById("confirmPassword"); //获取确认密码输入框元素
 const registerResult = document.getElementById("registerResult");   //获取错误提示元素
+const login = document.getElementById("login");                     //获取登录按钮元素
 
 //监听注册按钮点击事件
 registerButton.addEventListener("click", async () => {
@@ -30,4 +31,9 @@ registerButton.addEventListener("click", async () => {
     } else {
         registerResult.innerText = "两次输入的密码不一致";
     }
+})
+
+//监听登录按钮点击事件
+login.addEventListener("click", () => {
+    window.location.href = "../loginWindow/loginWindow.html";
 })

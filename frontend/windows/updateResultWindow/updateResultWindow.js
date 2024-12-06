@@ -7,11 +7,6 @@ window.myAPI.onUpdateAvailable((event, info) => {
     updateInfo.innerHTML = "发现新版本v" + info.version + "<br>" + "更新内容：" + "<br>" + info.releaseNotes;
 });
 
-//监听更新错误信息
-window.myAPI.onError((event, error) => {
-    updateInfo.textContent = "检查更新出错啦，可能是您的网络问题，请稍后再试，或者前往https://github.com/beisenmiyi/BsmyChat/releases下载最新版本";
-});
-
 //监听下载进度信息
 window.myAPI.onDownloadProgress((event, progressObj) => {
     downloadProgress.innerText = "下载中：" + progressObj.percent + "%";

@@ -19,6 +19,8 @@ public class Server {
         HttpServer httpServer = HttpServer.create(new InetSocketAddress("0.0.0.0", 49152), 10);
         httpServer.createContext("/login", new LoginHandler());         //创建登录处理器
         httpServer.createContext("/register", new RegisterHandler());   //创建注册处理器
+        httpServer.createContext("/addContacts", new AddContactsHandler());//创建添加联系人处理器
+        httpServer.createContext("/loadContacts", new LoadContactsHandler());//创建加载联系人处理器
         httpServer.setExecutor(null);//设置线程池，这里设置为null表示使用单线程
         httpServer.start();//启动HTTP服务器
         System.out.println("HTTP服务器已启动，监听地址：0.0.0.0:49152");
@@ -67,7 +69,7 @@ public class Server {
             }
             if (data.getContacts().equalsIgnoreCase("public")) {
                 for (Map.Entry<String, WebSocket> entry : webSocketMap.entrySet()) {
-                    entry.getValue().send(data.getUsername() + ": " + data.getMessage());
+                    entry.getValue().send(data.getUsername() + "/" + data.getContacts() + "/" + data.getMessage());
                 }
             } else {
                 for (Map.Entry<String, WebSocket> entry : webSocketMap.entrySet()) {

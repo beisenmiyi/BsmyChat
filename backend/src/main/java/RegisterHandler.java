@@ -15,7 +15,16 @@ public class RegisterHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         Data data;     //声明一个存放信息的data
+        if (httpExchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
+            httpExchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
+            httpExchange.getResponseHeaders().add("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+            httpExchange.getResponseHeaders().add("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Accept, Origin");
+            httpExchange.sendResponseHeaders(200, 0);
+        }
         if (httpExchange.getRequestMethod().equalsIgnoreCase("POST")) {
+            httpExchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
+            httpExchange.getResponseHeaders().add("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+            httpExchange.getResponseHeaders().add("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Accept, Origin");
             //从请求中获取数据
             try (InputStream inputStream = httpExchange.getRequestBody();
                  Reader reader = new InputStreamReader(inputStream)) {
